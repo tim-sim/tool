@@ -1,0 +1,10 @@
+#!/bin/sh
+
+i=$1
+
+for f in ./*.jpg
+do
+    #mv $f "$i.jpg";
+    mv $f `printf "%04i" $i`.jpg;
+    ((i += 1))
+done;

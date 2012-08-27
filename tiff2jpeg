@@ -1,0 +1,11 @@
+#!/bin/sh
+if [ -d "$1" ]
+then
+    DIR=$1
+else
+    DIR=$PWD
+fi
+
+echo "Converting images from directory $DIR"
+
+mogrify -format jpg -quality 85 $DIR/*.TIF

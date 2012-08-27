@@ -1,0 +1,125 @@
+#!/bin/bash
+# mp3 re-encoding script
+
+LAME=/usr/bin/lame
+FLAC=/usr/bin/flac
+BITRATE=320
+IDIR=.
+TDIR=./tmp
+ODIR=./out
+IFILE=""
+OFILE=""
+
+check_tools() {
+  echo "check_tools()..."
+  if [ -x $LAME ]; then
+  echo "$LAME is found"
+  else
+  echo "$LAME is not found"
+  fi
+  if [ -x $FLAC ]; then
+  echo "$FLAC is found"
+  else
+  echo "$FLAC is not found"
+  fi
+}
+
+out_params() {
+  echo "Bitrate   :   $BITRATE"
+  echo "Input dir :   $IDIR"
+  echo "Temporary dir : $TDIR"
+  echo "Output dir:   $ODIR"
+}
+
+decode_flac() {
+  if [ -z "$1" ]; then
+    echo "decode_flac(): no parameters"
+  return 1;
+  fi
+  ifile="$1".flac
+  ofile="$1".wav
+  echo "Decoding $ifile from FLAC"
+  "$FLAC" --silent --decode "$IDIR"/"$ifile" -o "$TDIR"/"$ofile"
+}
+
+decode_mp3() {
+  if [ -z "$1" ]; then
+    echo "decode_mp3(): no parameters"
+  return 1;
+  fi
+  ifile="$1".mp3
+  ofile="$1".wav
+  echo "Decoding $ifile from mp3"
+  "$LAME" --silent --decode "$IDIR"/"$ifile" "$TDIR"/"$ofile"
+}
+
+encode_mp3() {
+  if [ -z "$1" ]; then
+    echo "encode_mp3(): no parameters"
+  return 1;
+  fi
+  ifile="$1".wav
+  ofile="$1".mp3
+  echo "Encoding $ifile to mp3"
+  "$LAME" --silent --cbr -b"$BITRATE" -q0 "$TDIR"/"$ifile" "$ODIR"/"$ofile"
+}
+
+process_dir() {
+  if [ -d "$IDIR" ]; then
+    echo "Processing directory $IDIR"
+  else
+    echo "Directory $IDIR is not found"
+    return 1
+  fi
+
+  if [ -d "$ODIR" ]; then
+    rm -rf "$ODIR"
+  fi
+  mkdir "$ODIR"
+
+  if [ -d "$TDIR" ]; then
+    rm -rf "$TDIR"
+  fi
+  mkdir "$TDIR"
+
+  for file in *; do
+    if [ -f "$file" ]; then
+      name="${file%.*}"
+      ext="${file##*.}"
+      if [ "$ext" = "mp3" ]; then
+        decode_mp3 "$name"
+      elif [ "$ext" = "flac" ]; then
+        decode_flac "$name"
+      else
+        cp "$file" "$TDIR"/
+      fi
+      encode_mp3 "$name"
+    fi
+  done
+}
+
+# BEGIN #######################################################################
+
+check_tools
+
+while [ -n "$1" ]; do
+  case "$1" in
+  "-b" ) shift
+  BITRATE=$1;;
+  "-id" ) shift
+  IDIR=$1;;
+  "-od" ) shift
+  ODIR=$1;;
+  "-if" ) shift
+  IFILE=$1;;
+  "-of" ) shift
+  OFILE=$1;;
+  esac
+  shift
+done
+
+process_dir
+
+exit 0
+
+# END #########################################################################

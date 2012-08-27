@@ -1,0 +1,5 @@
+#/bin/sh
+
+size=$1
+
+mogrify -resize "$size"x"$size" *.jpg;

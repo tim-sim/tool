@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Removing Shotwell backup..."
+
+find . -regex '\./IMG_[0-9]+\.JPG' -exec rm {} \;
