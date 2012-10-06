@@ -8,4 +8,4 @@ fi
 
 echo "Converting images from directory $DIR"
 
-mogrify -format jpg -quality 85 $DIR/*.TIF
+mogrify -format jpg -quality 90 $DIR/*.TIF
