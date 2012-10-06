@@ -1,6 +1,0 @@
-#!/bin/sh
-
-echo "Backing up photos to yandex.."
-
-rsync --progress -vru --delete-after /home/tim/photos/2012 /home/tim/yandex/photos
-
