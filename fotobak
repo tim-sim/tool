@@ -2,8 +2,4 @@
 
 echo "Backing up photos.."
 
-rsync -e ssh --progress -vru --delete-after /home/tim/photos/ tim@192.168.0.105:/home/tim/data/photos/
-
-#echo "Backing up analogue.."
-
-#rsync -e ssh --progress -vru --delete-after /home/tim/pictures/analogue/ tim@192.168.0.102:/home/tim/data/photos/analogue/
+rsync -e ssh --progress -vru --delete-after /home/tim/photos/ tim@192.168.0.107:/home/tim/data/photos/

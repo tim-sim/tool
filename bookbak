@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Backing up photos.."
+
+rsync -e ssh --progress -vru --delete-after /home/tim/stuff/books tim@192.168.0.107:/home/tim/data/books

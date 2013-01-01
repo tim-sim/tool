@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Backing up photos.."
+
+rsync --progress -vru --delete-after /home/tim/photos/ /home/tim/junk/photos/
